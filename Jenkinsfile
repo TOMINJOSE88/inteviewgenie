@@ -81,19 +81,27 @@ stage('Security Stage') {
 }
 
 stage('Release Stage') {
+  when {
+    branch 'main' // Optional: only release on 'main' branch
+  }
   steps {
     echo '🚀 Releasing to Production...'
 
-    // Build production Docker image
+    // Tag and build production Docker image
     bat "docker build -t tominjose/interviewgenie:prod-%BUILD_NUMBER% ."
 
-    // Run production container
+    // Stop and remove any existing production container
+    bat 'docker rm -f interviewgenie-prod || exit 0'
+
+    // Run new production container
     bat '''
-      docker rm -f interviewgenie-prod || exit 0
       docker run -d --name interviewgenie-prod ^
         -p 4000:3000 ^
         -e MONGO_URI="%MONGO_URI%" ^
         -e OPENAI_API_KEY="%OPENAI_API_KEY%" ^
+        -e DD_ENV=production ^
+        -e DD_SERVICE=interviewgenie ^
+        -e DD_VERSION=1.0.%BUILD_NUMBER% ^
         tominjose/interviewgenie:prod-%BUILD_NUMBER%
     '''
   }
