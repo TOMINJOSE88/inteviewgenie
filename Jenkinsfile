@@ -65,19 +65,20 @@ pipeline {
       }
     }
 
-    stage('Deploy Container (Test)') {
-      steps {
-        echo '🚀 Deploying app in test container...'
-        bat '''
-          docker rm -f interviewgenie-test || exit 0
-          docker run -d --name interviewgenie-test ^
-            -p 3000:3000 ^
-            -e MONGO_URI=%MONGO_URI% ^
-            -e OPENAI_API_KEY=%OPENAI_API_KEY% ^
-            tominjose/interviewgenie
-        '''
-      }
-    }
+   stage('Deploy Container (Test)') {
+  steps {
+    echo '🚀 Deploying app in test container...'
+    bat '''
+      docker rm -f interviewgenie-test || exit 0
+      docker run -d --name interviewgenie-test ^
+        -p 3000:3000 ^
+        -e MONGO_URI="%MONGO_URI%" ^
+        -e OPENAI_API_KEY="%OPENAI_API_KEY%" ^
+        tominjose/interviewgenie
+    '''
+  }
+}
+
 
   }
 
