@@ -1,18 +1,24 @@
-# Use Node.js 18 as base image
-FROM node:18
+# Use the official Node.js 18 Alpine image
+FROM node:18-alpine
 
-# Set working directory inside container
-WORKDIR /app
+# Set the working directory inside the container
+WORKDIR /home/node/app
 
-# Copy package.json and install dependencies
+# Install dependencies first to leverage Docker caching
+# Copy only the package.json and package-lock.json
 COPY package*.json ./
-RUN npm install
 
-# Copy the rest of the app files
+# Install production dependencies (add --production to avoid dev dependencies)
+RUN npm install --production
+
+# Copy the rest of the application code
 COPY . .
 
-# App listens on port 3000
-EXPOSE 3000
+# Expose the port that your application will run on
+EXPOSE 5000
 
-# Start the app
-CMD ["npm", "start"]
+# Use a non-root user for running the application
+USER node
+
+# Command to run the application
+CMD [ "npm", "start" ]
