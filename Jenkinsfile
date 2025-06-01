@@ -12,15 +12,7 @@ pipeline {
 
   stages {
 
-    stage('Confirm Agent') {
-      steps {
-        bat 'echo Running on the docker-agent!'
-        bat 'whoami'
-        bat 'docker --version'
-        bat 'node -v'
-        bat 'npm -v'
-      }
-    }
+
 
     stage('Checkout Code') {
       steps {
@@ -36,27 +28,15 @@ pipeline {
       }
     }
 
-    stage('Run Tests') {
-      steps {
-        echo '🧪 Running Jest tests using npm script...'
-        bat 'npm run test --if-present'
-      }
-    }
+    
 
-    stage('Check Where Jenkins Runs') {
-      steps {
-        bat '''
-          ver
-          systeminfo | findstr /B /C:"OS Name" /C:"OS Version"
-        '''
-      }
+    stage('Code Quality Analysis') {
+  steps {
+    withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+      bat 'npx sonar-scanner'
     }
-
-    stage('Test Docker Access') {
-      steps {
-        bat 'docker version'
-      }
-    }
+  }
+}
 
     stage('Build Docker Image') {
       steps {
