@@ -43,6 +43,13 @@ stage('Check Where Jenkins Runs') {
 }
 
 
+    stage('Test Docker Access') {
+      steps {
+        sh 'docker version'
+      }
+    }
+
+
     stage('Build Docker Image') {
       steps {
         echo '🐳 Building Docker image...'
