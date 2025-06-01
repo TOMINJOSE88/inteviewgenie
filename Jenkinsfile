@@ -41,18 +41,18 @@ pipeline {
     }
 
     stage('Deploy Container (Test)') {
-      steps {
-        echo '🚀 Deploying app in test container...'
-        sh '''
-          docker rm -f interviewgenie-test || true
-          docker run -d --name interviewgenie-test \
-            -p 3000:3000 \
-            -e MONGO_URI=$MONGO_URI \
-            -e OPENAI_API_KEY=$OPENAI_API_KEY \
-            interviewgenie-app
-        '''
-      }
-    }
+  steps {
+    echo '🚀 Deploying app in test container...'
+    sh '''
+      docker rm -f interviewgenie-test || true
+      docker run -d --name interviewgenie-test \
+        -p 3000:3000 \
+        -e MONGO_URI=$MONGO_URI \
+        -e OPENAI_API_KEY=$OPENAI_API_KEY \
+        tominjose/interviewgenie
+    '''
+  }
+}
 
   }
 }
