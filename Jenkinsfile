@@ -1,7 +1,6 @@
 pipeline {
   agent { label 'docker-agent' }
 
-
   tools {
     nodejs 'NodeJS_18'  
   }
@@ -33,54 +32,64 @@ pipeline {
     stage('Install Dependencies') {
       steps {
         echo '📦 Installing Node.js packages...'
-        sh 'npm install'
+        bat 'npm install'
       }
     }
 
     stage('Run Tests') {
-  steps {
-    echo '✅ Giving Jest binary execute permissions...'
-    sh 'chmod +x node_modules/.bin/jest'
-
-    echo '🧪 Running Jest tests using npm script...'
-    sh 'npm run test --if-present'
-  }
-}
-
-stage('Check Where Jenkins Runs') {
-  steps {
-    sh 'uname -a || systeminfo'
-  }
-}
-
-
-    stage('Test Docker Access') {
       steps {
-        sh 'docker version'
+        echo '🧪 Running Jest tests using npm script...'
+        bat 'npm run test --if-present'
       }
     }
 
+    stage('Check Where Jenkins Runs') {
+      steps {
+        bat '''
+          ver
+          systeminfo | findstr /B /C:"OS Name" /C:"OS Version"
+        '''
+      }
+    }
+
+    stage('Test Docker Access') {
+      steps {
+        bat 'docker version'
+      }
+    }
 
     stage('Build Docker Image') {
       steps {
         echo '🐳 Building Docker image...'
-        sh 'docker build -t tominjose/interviewgenie .'
+        bat 'docker build -t tominjose/interviewgenie .'
       }
     }
 
     stage('Deploy Container (Test)') {
-  steps {
-    echo '🚀 Deploying app in test container...'
-    sh '''
-      docker rm -f interviewgenie-test || true
-      docker run -d --name interviewgenie-test \
-        -p 3000:3000 \
-        -e MONGO_URI=$MONGO_URI \
-        -e OPENAI_API_KEY=$OPENAI_API_KEY \
-        tominjose/interviewgenie
-    '''
-  }
-}
+      steps {
+        echo '🚀 Deploying app in test container...'
+        bat '''
+          docker rm -f interviewgenie-test || exit 0
+          docker run -d --name interviewgenie-test ^
+            -p 3000:3000 ^
+            -e MONGO_URI=%MONGO_URI% ^
+            -e OPENAI_API_KEY=%OPENAI_API_KEY% ^
+            tominjose/interviewgenie
+        '''
+      }
+    }
 
+  }
+
+  post {
+    always {
+      echo '🧹 Pipeline completed.'
+    }
+    success {
+      echo '✅ All steps succeeded!'
+    }
+    failure {
+      echo '❌ Something went wrong.'
+    }
   }
 }
