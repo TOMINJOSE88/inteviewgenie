@@ -10,7 +10,6 @@ const bcrypt = require('bcrypt');
 const User = require('./User');
 require('dotenv').config();
 
-jest.mock('axios');
 dotenv.config();
 
 const app = express();
