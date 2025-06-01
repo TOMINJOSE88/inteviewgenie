@@ -81,9 +81,6 @@ stage('Security Stage') {
 }
 
 stage('Release Stage') {
-  when {
-    branch 'main' // Optional: only release on 'main' branch
-  }
   steps {
     echo '🚀 Releasing to Production...'
 
