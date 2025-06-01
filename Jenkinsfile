@@ -1,9 +1,11 @@
 pipeline {
-  agent any
-
-  tools {
-    nodejs 'Node16' // name you gave above
+  agent {
+    docker {
+      image 'node:18'  // Pulls Node.js environment inside container
+      args '-v /var/run/docker.sock:/var/run/docker.sock'  // Enables Docker commands inside Jenkins
+    }
   }
+
   environment {
     MONGO_URI = credentials('MONGO_URI')
     OPENAI_API_KEY = credentials('OPENAI_API_KEY')
@@ -39,7 +41,7 @@ pipeline {
     stage('Build Docker Image') {
       steps {
         echo '🐳 Building Docker image...'
-        sh 'docker build -t interviewgenie-app .'
+        sh 'docker build -t tominjose/interviewgenie .'
       }
     }
 
