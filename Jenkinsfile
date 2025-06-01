@@ -81,29 +81,20 @@ stage('Security Stage') {
 }
 
 stage('Release Stage') {
-  when {
-    branch 'main'  // Only run on main branch (optional safety)
-  }
   steps {
     echo '🚀 Releasing to Production...'
 
-    // Optional: Tag your code as a release version (if Git credentials are set)
-    sh 'git config user.email "jenkins@yourdomain.com"'
-    sh 'git config user.name "Jenkins CI"'
-    sh 'git tag -a v1.0.${BUILD_NUMBER} -m "Release v1.0.${BUILD_NUMBER}" || true'
-    sh 'git push origin --tags || true'
+    // Build production Docker image
+    bat "docker build -t tominjose/interviewgenie:prod-%BUILD_NUMBER% ."
 
-    // Build production image with tag
-    sh "docker build -t tominjose/interviewgenie:prod-${BUILD_NUMBER} ."
-
-    // Simulate production deploy
-    sh '''
-      docker rm -f interviewgenie-prod || true
-      docker run -d --name interviewgenie-prod \
-        -p 4000:3000 \
-        -e MONGO_URI=$MONGO_URI \
-        -e OPENAI_API_KEY=$OPENAI_API_KEY \
-        tominjose/interviewgenie:prod-${BUILD_NUMBER}
+    // Run production container
+    bat '''
+      docker rm -f interviewgenie-prod || exit 0
+      docker run -d --name interviewgenie-prod ^
+        -p 4000:3000 ^
+        -e MONGO_URI="%MONGO_URI%" ^
+        -e OPENAI_API_KEY="%OPENAI_API_KEY%" ^
+        tominjose/interviewgenie:prod-%BUILD_NUMBER%
     '''
   }
 }
@@ -112,7 +103,7 @@ stage('Release Stage') {
 
 
 
-  }
+ 
 
   post {
     always {
