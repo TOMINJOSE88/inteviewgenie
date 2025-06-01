@@ -36,6 +36,12 @@ pipeline {
   }
 }
 
+stage('Check Where Jenkins Runs') {
+  steps {
+    sh 'uname -a || systeminfo'
+  }
+}
+
 
     stage('Build Docker Image') {
       steps {
