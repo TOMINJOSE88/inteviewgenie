@@ -1,5 +1,10 @@
 pipeline {
-  agent any
+  agent {
+    docker {
+      image 'node:18'  // includes Node.js + npm
+      args '-v /var/run/docker.sock:/var/run/docker.sock'
+    }
+  }
 
   tools {
     nodejs 'NodeJS_18'  
