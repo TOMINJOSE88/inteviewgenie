@@ -28,9 +28,16 @@ pipeline {
       }
     }
 
+    stage('Test Stage') {
+  steps {
+    echo '🧪 Running tests...'
+    bat 'npm run test --if-present'
+  }
+}
+
     
 
-    stage('Code Quality Analysis') {
+    stage('Code Quality Stage') {
   steps {
     withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
       bat 'npx sonar-scanner'
@@ -38,7 +45,7 @@ pipeline {
   }
 }
 
-stage('Security Scan') {
+stage('Security Stage') {
   steps {
     echo '🔐 Installing and running Snyk for vulnerability analysis...'
     bat 'npm install -g snyk'
@@ -52,14 +59,14 @@ stage('Security Scan') {
 
 
 
-    stage('Build Docker Image') {
+    stage('Build Stage') {
       steps {
         echo '🐳 Building Docker image...'
         bat 'docker build -t tominjose/interviewgenie .'
       }
     }
 
-   stage('Deploy Container (Test)') {
+   stage('Deploy Stage') {
   steps {
     echo '🚀 Deploying app in test container...'
     bat '''
@@ -72,6 +79,37 @@ stage('Security Scan') {
     '''
   }
 }
+
+stage('Release Stage') {
+  when {
+    branch 'main'  // Only run on main branch (optional safety)
+  }
+  steps {
+    echo '🚀 Releasing to Production...'
+
+    // Optional: Tag your code as a release version (if Git credentials are set)
+    sh 'git config user.email "jenkins@yourdomain.com"'
+    sh 'git config user.name "Jenkins CI"'
+    sh 'git tag -a v1.0.${BUILD_NUMBER} -m "Release v1.0.${BUILD_NUMBER}" || true'
+    sh 'git push origin --tags || true'
+
+    // Build production image with tag
+    sh "docker build -t tominjose/interviewgenie:prod-${BUILD_NUMBER} ."
+
+    // Simulate production deploy
+    sh '''
+      docker rm -f interviewgenie-prod || true
+      docker run -d --name interviewgenie-prod \
+        -p 4000:3000 \
+        -e MONGO_URI=$MONGO_URI \
+        -e OPENAI_API_KEY=$OPENAI_API_KEY \
+        tominjose/interviewgenie:prod-${BUILD_NUMBER}
+    '''
+  }
+}
+
+
+
 
 
   }
