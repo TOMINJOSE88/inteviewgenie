@@ -41,15 +41,15 @@ pipeline {
 stage('Security Scan') {
   steps {
     echo '🔐 Installing and running Snyk for vulnerability analysis...'
-    sh 'npm install -g snyk'
+    bat 'npm install -g snyk'
     
     withCredentials([string(credentialsId: 'SNYK_TOKEN', variable: 'SNYK_TOKEN')]) {
-      sh 'snyk auth $SNYK_TOKEN'
-      // Fail build if High/Critical vulns found
-      sh 'snyk test --severity-threshold=high'
+      bat 'snyk auth %SNYK_TOKEN%'
+      bat 'snyk test --severity-threshold=high'
     }
   }
 }
+
 
 
     stage('Build Docker Image') {
