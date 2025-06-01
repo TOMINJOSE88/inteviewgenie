@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>My Profile - InterviewGenie</title>
+  <link rel="stylesheet" href="profile.css" />
+</head>
+<body>
+  <header>
+    <img src="interviewgenie-high-resolution-logo.png" alt="InterviewGenie Logo" class="logo">
+    <a href="home.html" class="btn">← Back</a>
+  </header>
+
+  <div class="profile-container">
+    <h1>Your Profile</h1>
+    <form id="profileForm">
+      <div class="profile-field">
+        <label>Name</label>
+        <span id="nameDisplay"></span>
+        <input type="text" id="nameInput" style="display:none;" />
+        <button type="button" class="edit-btn" onclick="toggleEdit('name')">✏️</button>
+      </div>
+
+      <div class="profile-field">
+        <label>Email</label>
+        <span id="emailDisplay"></span>
+        <input type="email" id="emailInput" disabled style="display:none;" />
+      </div>
+
+      <div class="profile-field">
+        <label>Change Password</label>
+        <input type="password" id="passwordInput" placeholder="New password (optional)" />
+      </div>
+
+      <button type="submit">Save Changes</button>
+      <p id="status"></p>
+    </form>
+  </div>
+
+  <script src="profile.js"></script>
+</body>
+</html>

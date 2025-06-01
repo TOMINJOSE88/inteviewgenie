@@ -1,0 +1,71 @@
+.form-container {
+  max-width: 400px;
+  margin: 30px auto;
+  background-color: #1a1a1a;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.form-container input {
+  margin-bottom: 15px;
+  padding: 12px;
+  border: 1px solid #f4e99b;
+  background-color: #0d0d0d;
+  color: #fff2b2;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.form-container button {
+  padding: 12px;
+  background-color: #f4e99b;
+  color: #1a1a1a;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.bottom-link {
+  text-align: center;
+  color: #ccc;
+  margin-top: 10px;
+}
+
+.bottom-link a {
+  color: #ffd700;
+  text-decoration: none;
+}
+.logo {
+  height: 160px;        /* Fix the size */
+  object-fit: contain; /* Prevent stretching */
+  display: block;
+}
+
+body {
+  background-image: url('back.png'); /* or 'assets/bg-dark.jpg' */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+  backdrop-filter: blur(10px);   /* 💡 creates the blur effect */
+  -webkit-backdrop-filter: blur(10px); /* for Safari support */
+}
+.page-title {
+  text-align: center;
+  font-size: 2rem;
+  color: #f4e99b; /* light gold */
+  margin-top: 30px;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.page-title span {
+  color: #ffd700; /* brighter gold for brand name */
+}

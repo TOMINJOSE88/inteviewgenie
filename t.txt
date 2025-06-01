@@ -1,0 +1,7 @@
+Service	Responsibility
+auth-service	Signup, login, logout, session check
+profile-service	Profile update (name/password)
+qa-service	Save, fetch, delete user-generated Q&A
+gpt-service	Calls OpenAI API to generate Q&A from user input
+frontend-service	Serves static HTML/CSS/JS (landing, login, home, profile pages)
+gateway-service	Central API Gateway for routing all requests to the correct internal microservice
