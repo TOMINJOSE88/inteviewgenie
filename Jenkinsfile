@@ -1,8 +1,15 @@
 pipeline {
-  agent {
-    docker {
-      image 'node:18'  // includes Node.js + npm
-      args '-v /var/run/docker.sock:/var/run/docker.sock'
+  agent { label 'docker-agent' }
+
+  stages {
+    stage('Confirm Agent') {
+      steps {
+        bat 'echo Running on the docker-agent!'
+        bat 'whoami'
+        bat 'docker --version'
+        bat 'node -v'
+        bat 'npm -v'
+      }
     }
   }
 
