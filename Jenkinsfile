@@ -1,10 +1,5 @@
 pipeline {
-  agent {
-    docker {
-      image 'node:18'  // Pulls Node.js environment inside container
-      args '-v /var/run/docker.sock:/var/run/docker.sock'  // Enables Docker commands inside Jenkins
-    }
-  }
+  agent any
 
   environment {
     MONGO_URI = credentials('MONGO_URI')
