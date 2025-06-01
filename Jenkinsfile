@@ -21,6 +21,7 @@ pipeline {
         bat 'node -v'
         bat 'npm -v'
       }
+    }
 
     stage('Checkout Code') {
       steps {
