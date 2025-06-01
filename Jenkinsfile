@@ -1,6 +1,10 @@
 pipeline {
   agent any
 
+  tools {
+    nodejs 'NodeJS_18'  
+  }
+
   environment {
     MONGO_URI = credentials('MONGO_URI')
     OPENAI_API_KEY = credentials('OPENAI_API_KEY')
